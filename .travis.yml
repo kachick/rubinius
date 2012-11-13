@@ -7,15 +7,10 @@ before_script:
 script: rake
 branches:
   only:
-    - master
+    - tmp/for_travis-ci
 notifications:
   recipients:
-    - evan+notify@phx.io
-    - bford@engineyard.com
-    - d.bussink@gmail.com
-  email:
-    on_success: change
-    on_failure: always
+    - kachick1@gmail.com
 rvm:
   - 1.8.7
   - 1.9.3
