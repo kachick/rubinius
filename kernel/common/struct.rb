@@ -201,10 +201,6 @@ class Struct
     self.class.members
   end
 
-  def select(&block)
-    super
-  end
-
   def to_a
     _attrs.map { |var| instance_variable_get :"@#{var}" }
   end
