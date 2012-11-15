@@ -2,7 +2,7 @@
 
 class Struct
   def self.members
-    self::STRUCT_ATTRS.map { |member| member.to_s }
+    self::STRUCT_ATTRS.map(&:to_s)
   end
 
   def to_s

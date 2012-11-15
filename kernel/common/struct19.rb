@@ -2,7 +2,7 @@
 
 class Struct
   def self.members
-    self::STRUCT_ATTRS.map { |member| member.to_sym }
+    self::STRUCT_ATTRS.dup
   end
 
   def to_s
