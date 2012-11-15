@@ -202,7 +202,7 @@ class Struct
   end
 
   def select(&block)
-    to_a.select(&block)
+    super
   end
 
   def to_a
