@@ -2,11 +2,11 @@
 
 class Struct
   def self.members
-    return self::STRUCT_ATTRS.map { |member| member.to_sym }
+    self::STRUCT_ATTRS.map { |member| member.to_sym }
   end
 
   def members
-    return self.class.members
+    self.class.members
   end
 
   def to_s

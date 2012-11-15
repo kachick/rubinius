@@ -39,11 +39,11 @@ class Struct
       attr_accessor(*attrs)
 
       def self.new(*args, &block)
-        return subclass_new(*args, &block)
+        subclass_new(*args, &block)
       end
 
       def self.[](*args)
-        return new(*args)
+        new(*args)
       end
 
       const_set :STRUCT_ATTRS, attrs
@@ -53,7 +53,7 @@ class Struct
 
     klass.module_eval(&block) if block
 
-    return klass
+    klass
   end
 
   # Don't specialize any thing created in the kernel. We hook up
@@ -66,7 +66,7 @@ class Struct
   end
 
   def _attrs # :nodoc:
-    return self.class::STRUCT_ATTRS
+    self.class::STRUCT_ATTRS
   end
 
   def instance_variables
@@ -120,7 +120,7 @@ class Struct
       raise NameError, "no member '#{var}' in struct"
     end
 
-    return instance_variable_get(:"@#{var}")
+    instance_variable_get(:"@#{var}")
   end
 
   def []=(var, obj)
@@ -147,7 +147,7 @@ class Struct
       var = _attrs[var]
     end
 
-    return instance_variable_set(:"@#{var}", obj)
+    instance_variable_set(:"@#{var}", obj)
   end
 
   def eql?(other)
@@ -185,25 +185,25 @@ class Struct
     return _attrs.size if Thread.detect_outermost_recursion self do
       _attrs.each { |var| hash_val ^= instance_variable_get(:"@#{var}").hash }
     end
-    return hash_val
+    hash_val
   end
 
   def length
-    return _attrs.length
+    _attrs.length
   end
 
   alias_method :size, :length
 
   def self.length
-    return self::STRUCT_ATTRS.size
+    self::STRUCT_ATTRS.size
   end
 
   def self.members
-    return self::STRUCT_ATTRS.map { |member| member.to_s }
+    self::STRUCT_ATTRS.map { |member| member.to_s }
   end
 
   def members
-    return self.class.members
+    self.class.members
   end
 
   def select(&block)
@@ -211,7 +211,7 @@ class Struct
   end
 
   def to_a
-    return _attrs.map { |var| instance_variable_get :"@#{var}" }
+    _attrs.map { |var| instance_variable_get :"@#{var}" }
   end
 
   alias_method :values, :to_a
