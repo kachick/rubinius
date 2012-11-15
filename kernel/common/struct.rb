@@ -75,13 +75,11 @@ class Struct
   end
 
   def initialize(*args)
-    attrs = self.class::STRUCT_ATTRS
-
-    unless args.length <= attrs.length
+    unless args.length <= _attrs.length
       raise ArgumentError, "Expected #{attrs.size}, got #{args.size}"
     end
 
-    attrs.each_with_index do |attr, i|
+    _attrs.each_with_index do |attr, i|
       instance_variable_set :"@#{attr}", args[i]
     end
   end
