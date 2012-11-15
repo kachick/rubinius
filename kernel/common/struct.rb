@@ -175,10 +175,6 @@ class Struct
 
       alias_method :size, :length
 
-      def self.length
-        self::STRUCT_ATTRS.size
-      end
-
       def members
         self.class.members
       end
