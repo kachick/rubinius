@@ -1,7 +1,6 @@
 # -*- encoding: us-ascii -*-
 
 class Struct
-
   include Enumerable
 
   class << self
