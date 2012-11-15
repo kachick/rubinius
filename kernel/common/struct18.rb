@@ -1,6 +1,10 @@
 # -*- encoding: us-ascii -*-
 
 class Struct
+  def self.members
+    self::STRUCT_ATTRS.map { |member| member.to_s }
+  end
+
   def to_s
     return "[...]" if Thread.guarding? self
 

@@ -5,10 +5,6 @@ class Struct
     self::STRUCT_ATTRS.map { |member| member.to_sym }
   end
 
-  def members
-    self.class.members
-  end
-
   def to_s
     return "[...]" if Thread.guarding? self
 

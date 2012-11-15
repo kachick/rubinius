@@ -197,10 +197,6 @@ class Struct
     self::STRUCT_ATTRS.size
   end
 
-  def self.members
-    self::STRUCT_ATTRS.map { |member| member.to_s }
-  end
-
   def members
     self.class.members
   end
