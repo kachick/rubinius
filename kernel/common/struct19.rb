@@ -2,11 +2,7 @@
 
 class Struct
   def self.members
-    return self::STRUCT_ATTRS.map { |member| member.to_sym }
-  end
-
-  def members
-    return self.class.members
+    self::STRUCT_ATTRS.dup
   end
 
   def to_s
@@ -31,5 +27,4 @@ class Struct
   end
 
   alias_method :inspect, :to_s
-
 end

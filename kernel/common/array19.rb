@@ -619,7 +619,7 @@ class Array
   alias_method :to_s, :inspect
 
   def uniq(&block)
-    dup.uniq!(&block) or dup
+    dup.tap{|d|d.uniq!(&block)}
   end
 
   def uniq!(&block)

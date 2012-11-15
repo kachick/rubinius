@@ -441,7 +441,7 @@ class Array
   end
 
   def uniq
-    dup.uniq! or dup
+    dup.tap{|d|d.uniq!}
   end
 
   def uniq!
