@@ -67,7 +67,6 @@ class Struct
           instance_variable_set :"@#{attr}", args[i]
         end
       end
-
       private :initialize
 
       def ==(other)
