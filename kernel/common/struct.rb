@@ -30,7 +30,7 @@ class Struct
       else
         raise TypeError, "#{a.inspect} is not a symbol"
       end
-    end
+    end.freeze
 
     klass = Class.new self do
       _specialize attrs
