@@ -11,6 +11,7 @@
 #include "builtin/basicobject.hpp"
 #include "builtin/block_environment.hpp"
 #include "builtin/bytearray.hpp"
+#include "builtin/character.hpp"
 #include "builtin/class.hpp"
 #include "builtin/compactlookuptable.hpp"
 #include "builtin/compiledcode.hpp"
@@ -113,7 +114,7 @@ namespace rubinius {
   void VM::bootstrap_class(STATE) {
     /* Class is created first by hand, and twiddle to setup the internal
        recursion. */
-    Class* cls = (Class*)om->allocate_object_raw(sizeof(Class));
+    Class* cls = reinterpret_cast<Class*>(om->allocate_object_raw(sizeof(Class)));
 
     /* We create these 8 classes in a particular way and in a particular
      * order. We need all 8 to create fully initialized Classes and
@@ -297,6 +298,7 @@ namespace rubinius {
     Array::init(state);
     ByteArray::init(state);
     String::init(state);
+    Character::init(state);
     Executable::init(state);
     CompiledCode::init(state);
     AtomicReference::init(state);

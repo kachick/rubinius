@@ -27,13 +27,9 @@ class IO
           char << @storage[@start]
           @start += 1
 
-          char.force_encoding io.external_encoding
+          char.force_encoding(io.external_encoding || Encoding.default_external)
           if char.chr_at(0)
-            if io.internal_encoding
-              return char.encode(io.internal_encoding)
-            else
-              return char
-            end
+            return IO.read_encode io, char
           end
         end
       end
@@ -141,13 +137,16 @@ class IO
   end
 
   def self.read_encode(io, str)
-    if io.internal and io.external
-      ec = Encoding::Converter.new io.external, io.internal
+    internal = io.internal_encoding
+    external = io.external_encoding || Encoding.default_external
+
+    if external.equal? Encoding::ASCII_8BIT and not internal
+      str.force_encoding external
+    elsif internal and external
+      ec = Encoding::Converter.new external, internal
       ec.convert str
-    elsif io.external
-      str.force_encoding io.external
     else
-      str
+      str.force_encoding external
     end
   end
 
@@ -393,6 +392,24 @@ class IO
 
     binmode if binary
     set_encoding external, internal
+
+    if @internal
+      if Encoding.default_external == Encoding.default_internal
+        @internal = nil
+      end
+    elsif @mode != RDONLY
+      if Encoding.default_external != Encoding.default_internal
+        @internal = Encoding.default_internal
+      end
+    end
+
+    unless @external
+      if @binmode
+        @external = Encoding::ASCII_8BIT
+      elsif @internal or Encoding.default_internal
+        @external = Encoding.default_external
+      end
+    end
   end
 
   private :initialize
@@ -773,13 +790,13 @@ class IO
     when String
       @external = nil
     when nil
-      @external = Encoding.default_external unless @binmode
+      @external = nil
     else
       @external = nil
       external = StringValue(external)
     end
 
-    unless @external
+    if @external.nil? and not external.nil?
       if index = external.index(":")
         internal = external[index+1..-1]
         external = external[0, index]
@@ -805,11 +822,15 @@ class IO
 
     case internal
     when Encoding
-      internal = nil if @external == internal
+      @internal = nil if @external == internal
     when String
       # do nothing
     when nil
-      internal = Encoding.default_internal unless @binmode
+      if @mode == RDONLY
+        @internal = Encoding.default_internal
+      else
+        @internal = nil
+      end
     else
       internal = StringValue(internal)
     end
@@ -888,7 +909,8 @@ class IO
   end
 
   def external_encoding
-    @external
+    return @external if @external
+    return Encoding.default_external if @mode == RDONLY
   end
 
   def internal_encoding

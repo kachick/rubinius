@@ -306,7 +306,7 @@ namespace rubinius {
   NativeFunction* NativeFunction::generate(STATE, Pointer* ptr, Symbol* name,
                                            Array* args, Object* ret)
   {
-    int i, tot, arg_count;
+    int tot, arg_count;
     Object* type;
     FFIArgInfo ret_info;
     FFIArgInfo* args_info;
@@ -319,7 +319,7 @@ namespace rubinius {
     if(tot > 0) {
       args_info = ALLOC_N(FFIArgInfo, tot);
 
-      for(i = 0; i < tot; i++) {
+      for(int i = 0; i < tot; i++) {
         type = args->get(state, i);
         if(type->fixnum_p()) {
           args_info[i].type = as<Integer>(type)->to_native();
@@ -612,7 +612,7 @@ namespace rubinius {
   Array* NativeFunction::generate_tramp(STATE, Object* obj, Symbol* name,
                                         Array* args, Object* ret)
   {
-    int i, tot;
+    int tot;
     Object* type;
     FFIArgInfo ret_info;
     FFIArgInfo* args_info;
@@ -623,7 +623,7 @@ namespace rubinius {
     if(tot > 0) {
       args_info = ALLOC_N(FFIArgInfo, tot);
 
-      for(i = 0; i < tot; i++) {
+      for(int i = 0; i < tot; i++) {
         type = args->get(state, i);
         if(type->fixnum_p()) {
           args_info[i].type = as<Integer>(type)->to_native();
@@ -744,8 +744,8 @@ namespace rubinius {
     // Because we call back into ruby to do conversions.
     RootBuffer vrf(state->vm()->root_buffers(), args.arguments(), args.total());
 
-    void** values = ALLOCA_N(void*, ffi_data->arg_count);
-    void** heap_allocations = ALLOCA_N(void*, ffi_data->arg_count);
+    void* values[ffi_data->arg_count];
+    void* heap_allocations[ffi_data->arg_count];
     size_t i;
 
     for(i = 0; i < ffi_data->arg_count; i++) {
@@ -904,7 +904,7 @@ namespace rubinius {
               int size;
               size = so->byte_size();
 
-              char* data = ALLOCA_N(char, size + 1);
+              char data[size + 1];
               memcpy(data, so->byte_address(), size);
               data[size] = 0;
               *tmp = data;
