@@ -1,60 +1,69 @@
 ---
 layout: doc_ja
-title: Building Rubinius
-previous: Requirements
+title: Rubinius のビルド
+previous: 必要要件
 previous_url: getting-started/requirements
 next: Running Rubinius
 next_url: getting-started/running-rubinius
-translated: true
 ---
 
-あなたが構築することができますし、ソースディレクトリからRubiniusの
-を実行してください。あなたがする必要はありません。 Rubiniusは
-それを実行するためにインストールしてください。方向は、以下の両方
-のインストールについて詳しく説明しますRubiniusの、ソースディレクトリ
-から、それを実行している。
+実行するだけであれば、インストールの手間を掛けずにソースディレクトリからビルドする事も可能です。
+以下の記事では、インストール手順と、ソースディレクトリからビルドする手順の両方を解説します。
 
-RubiniusはJITコンパイラのLLVMのを使用しています。 Rubiniusは、特定の依存
-LLVMのバージョンの。お使いのシステムにLLVMのインストールされている場合、パス
-`--skip-system`フラグは、以下の方向でスクリプトを設定してください。
+Rubinius は JITコンパイラ として LLVM を使用します。 また、 C++ RTTI (run-time type
+ information) を有効にした上でビルドされた、特定バージョンの LLVM に依存します。
+依存先として有効な LLVM がインストールされているかどうかは、 configure スクリプトが自動的に
+チェックします。
+なんらかの理由でシステムへインストール済みの LLVM へRubiniusのビルドを依存させられ無い場合、
+以下の記事中で configure スクリプトを実行する箇所に `--skip-system` オプションを加えて
+下さい。
 
 
-### Getting the Source
+### ソースコードの入手
 
-RubiniusのソースコードはtarballとしてのGitHubにプロジェクトとして利用可能です。
-あなたは[ここのtarballをダウンロード](https://github.com/rubinius/rubinius/tarball/master)することができます。
+Rubinius のソースコードは、 tarball や GitHub のプロジェクトページ等から入手可能です。  
+[tarballはこちらから！](https://github.com/rubinius/rubinius/tarball/master)
 
-To use Git:
+Git を使う場合:
 
-  1. Change your current working directory to your development directory
+  1. カレントディレクトリを、貴方の開発用ディレクトリに変更して下さい
   2. `git clone git://github.com/rubinius/rubinius.git`
 
 
-### Installing Rubinius
+### Rubinius のインストール
 
-あなたのアプリケーションを実行するためにRubiniusの利用を計画している場合、これは良いです
-オプションを選択します。ただし、また、ソースディレクトリから直接Rubiniusのを実行することができます。
-ことの詳細については、次のセクションを参照してください。
+アプリケーションを実行するために Rubinius を利用しようとしているのであれば、
+インストールまで済ませてしまうのも良い選択です。
+とはいえ、そういった場合でもソースディレクトリから利用することが可能です。
+その方法ついては、次のセクションで解説します。
 
-我々は、`必要としないや`sudo場所にRubiniusのをインストールすることをお勧め
-スーパーユーザー権限が必要です。 Rubiniusのをインストールするには：
+ここでお勧めするインストール方法では、 `sudo` や superuser 権限は必要ありません。
+
+インストール手順：
 
   1. `./configure --prefix=/path/to/install/dir`
   2. `rake install`
-  3. Follow the directions to add the Rubinius _bin_ directory to your PATH
+  3. 環境変数 PATH へ、Rubinius の _bin_ ディレクトリを追加しましょう 
 
 
-### Running from the Source Directory
+### ソースディレクトリから動かす方法
 
-If you plan to work on Rubinius itself, you should use this option.
+Rubinius自体の開発へ参加される場合は、こちらを選びましょう。
 
   1. `./configure`
   2. `rake`
 
-あなただけのRubiniusのをしようとしている場合は、_bin_を追加して指示に従ってください
-PATHにディレクトリを指定します。
+Rubinius を取りあえず試すだけであれば、 環境変数 PATH へ Rubinius の _bin_
+ディレクトリを追加する事をお勧めしています。
 
-ただし、Rubiniusの開発を行っている場合は、NOTは_bin_を追加する必要があります。
-Rubiniusはシステムを構築するため、PATHにディレクトリをピックアップする
-`ruby`のと`熊手は`Rubiniusの実行可能ファイルへのリンクを示します。 Rubiniusは別のを必要とする
-Rubyは実行可能なプロセスを構築する時に自分自身をブートストラップする。
+ですが、 Rubinius 自体を開発する場合、 _このパスを追加してはいけません_ 。
+Rubinius のビルドシステムは、 `ruby` や `rake` を Rubinius の実行ファイルへリンクします。
+Rubinius のビルド中は、 Ruby の実行環境と切り離されていることが求められます。
+
+### デバッグ
+
+VM のデバッグを行われる場合、デバッガ(GDB等)を用いる等、最適化オプションを外して
+コンパイルしたいと思われるかもしれません。
+その時には、環境変数 DEV を設定した上でビルドして下さい。
+
+例: `DEV=1 rake build`
