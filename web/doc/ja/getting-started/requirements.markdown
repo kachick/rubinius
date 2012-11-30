@@ -3,25 +3,24 @@ layout: doc_ja
 title: 必要要件
 previous: はじめに
 previous_url: getting-started
-next: Building
+next: Rubinius のビルド
 next_url: getting-started/building
 ---
 
-以下に示すプログラムおよびライブラリがインストールされていることを確認してください。
-また、特定のオペレーティングシステムに対する特別な要件については、下のサブセクションを参照してください
+このページに示すプログラムとライブラリがインストールされていることを確認してください。
+また、オペレーティングシステム毎の特別な要件について、該当するサブセクションを参照してください。
 
-後ろに書かれているものは、必要となるプログラムやライブラリに関する提言です。
-ご使用のオペレーティングシステムまたはパッケージマネージャによっては、別のパッケージを利用できるかもしれません。
+次のプログラムやライブラリへの記述は、あくまで Rubinius をビルドするための情報です。
+御使用のOSやパッケージマネージャによっては、別のパッケージを利用できるかもしれません。
 
   * [GCC and G++ 4.x](http://gcc.gnu.org/)
   * [GNU Bison](http://www.gnu.org/software/bison/)
   * [MRI Ruby 1.8.7+](http://www.ruby-lang.org/)
-    システム上に Ruby 1.8.7 がインストールされていないのならば、[RVM](https://rvm.beginrescueend.com/)
-    を使ってインストールすることをおすすめします。
+    システムに Ruby 1.8.7 がインストールされていない場合、 [RVM](https://rvm.beginrescueend.com/) を使ってインストールすることを御検討下さい。
   * [Rubygems](http://www.rubygems.org/)
   * [Git](http://git.or.cz/)
   * [ZLib](http://www.zlib.net/)
-  * pthread - The pthread library should be installed by your operating system
+  * pthread - このライブラリは、OSによってインストールされている必要があります。
   * [gmake](http://savannah.gnu.org/projects/make/)
   * [rake](http://rake.rubyforge.org/) `[sudo] gem install rake`
 
@@ -41,9 +40,15 @@ developer mode crash reporting を有効にできます。
   * zlib1g-dev
   * libssl-dev
 
+### Fedora/CentOS
+
+  * ruby-devel
+  * readline-devel
+  * zlib-devel
+  * openssl-devel
 
 ### FreeBSD
 
 Rubinius は、FreeBSD の ports ツリーに lang/rubinius という port をもっています。
-この port に関する情報は [http://freshports.org](http://freshports) で得ることができます。
-インストールされると、このポートは、全ての依存するものを自動的にインストールします。
+この port に関する情報は [FreshPorts](http://www.freshports.org/lang/rubinius/) で得ることができます。
+一度インストールした後、この port は、全ての依存するものを自動的にインストールします。
