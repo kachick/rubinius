@@ -1,27 +1,25 @@
 ---
 layout: doc_ja
-title: Running Rubinius
-previous: Building
+title: Rubinius の実行
+previous: Rubinius のビルド
 previous_url: getting-started/building
 next: Troubleshooting
 next_url: getting-started/troubleshooting
-translated: true
 ---
 
-Once you have followed the steps for building (and possibly installing)
-Rubinius, you can verify it is working:
+一度これらの手順を踏んでインストールできたのであれば、 早速 Rubinius が動くことを確認できます:
 
     rbx -v
 
-Rubinius generally works like Ruby from the command-line. For example:
+大抵の場合、 Rubinius は Ruby と同じコマンドライン操作で動きます。:
 
     rbx -e 'puts "Hello!"'
 
-To run a ruby file named 'code.rb':
+'code.rb'というファイル名のスクリプトを実行する場合:
 
     rbx code.rb
 
-To run IRB:
+IRBを使う場合:
 
     rbx
 

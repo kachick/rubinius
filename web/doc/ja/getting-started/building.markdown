@@ -3,7 +3,7 @@ layout: doc_ja
 title: Rubinius のビルド
 previous: 必要要件
 previous_url: getting-started/requirements
-next: Running Rubinius
+next: Rubinius の実行
 next_url: getting-started/running-rubinius
 ---
 
