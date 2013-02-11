@@ -1,6 +1,11 @@
 module Process
   Rubinius::Globals.read_only :$?
 
+  def self.fetch_resource(resource)
+    Rubinius::Type.coerce_to resource, Integer, :to_int
+  end
+  private_class_method :fetch_resource
+
   def self.set_status_global(status)
     Rubinius::Globals.set! :$?, status
   end

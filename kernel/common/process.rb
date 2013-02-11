@@ -37,7 +37,7 @@ module Process
   end
 
   def self.setrlimit(resource, cur_limit, max_limit=undefined)
-    resource =  Rubinius::Type.coerce_to resource, Integer, :to_int
+    resource =  fetch_resource resource
     cur_limit = Rubinius::Type.coerce_to cur_limit, Integer, :to_int
 
     unless max_limit.equal? undefined
@@ -54,7 +54,7 @@ module Process
   end
 
   def self.getrlimit(resource)
-    resource =  Rubinius::Type.coerce_to resource, Integer, :to_int
+    resource = fetch_resource resource
 
     lim_max = []
     rlimit = Rlimit.new

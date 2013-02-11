@@ -253,6 +253,21 @@ module Process
   Rubinius::Globals.read_only :$?
   Rubinius::Globals.set_hook(:$?) { Thread.current[:$?] }
 
+  def self.fetch_resource(resource)
+    if resource.respond_to? :to_sym
+      resource_name = Rubinius::Type.coerce_to resource, Symbol, :to_sym
+      relative_const_name = :"RLIMIT_#{resource_name}"
+      if const_defined? relative_const_name
+        const_get relative_const_name
+      else
+        raise ArgumentError, "invalid resource name: #{resource_name}"
+      end
+    else
+      Rubinius::Type.coerce_to resource, Integer, :to_int
+    end
+  end
+  private_class_method :fetch_resource
+
   def self.set_status_global(status)
     Thread.current[:$?] = status
   end
