@@ -258,7 +258,7 @@ class Time
     #
     def parse(date, now=self.now)
       comp = !block_given?
-      d = Date._parse(date, comp, true)
+      d = Date.__send__ :_fast_parse, date, comp
       if !d.year && !d.mon && !d.mday && !d.hour && !d.min && !d.sec && !d.sec_fraction
         raise ArgumentError, "no time information in #{date.inspect}"
       end

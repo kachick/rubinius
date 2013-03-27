@@ -1062,12 +1062,8 @@ class Date
     end
   end
 
-  private_class_method :_parse_day, :_parse_time, # :_parse_beat,
-        :_parse_eu, :_parse_us, :_parse_iso, :_parse_iso2,
-        :_parse_jis, :_parse_vms, :_parse_sla, :_parse_dot,
-        :_parse_year, :_parse_mon, :_parse_mday, :_parse_ddd
-
-  def self._parse(str, comp=false, return_bag=false)
+  # return an instance of Bag
+  def self._fast_parse(str, comp=false)
     str = str.dup
 
     e = Format::Bag.new
@@ -1130,8 +1126,17 @@ class Date
 
     e.offset ||= zone_to_diff(e.zone) if e.zone
 
-    return e if return_bag
-    e.to_hash
+    e
+  end
+
+  private_class_method :_parse_day, :_parse_time, # :_parse_beat,
+        :_parse_eu, :_parse_us, :_parse_iso, :_parse_iso2,
+        :_parse_jis, :_parse_vms, :_parse_sla, :_parse_dot,
+        :_parse_year, :_parse_mon, :_parse_mday, :_parse_ddd
+        :_fast_parse
+
+  def self._parse(str, comp=true)
+    _fast_parse(str, comp).to_hash
   end
 
   def self.zone_to_diff(zone) # :nodoc:
