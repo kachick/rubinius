@@ -415,21 +415,21 @@ class Date
         case s
         when 'A', 'a'
           return unless str.sub!(/\A(#{Format::DAYS.keys.join('|')})/io, '') ||
-        		str.sub!(/\A(#{Format::ABBR_DAYS.keys.join('|')})/io, '')
+                        str.sub!(/\A(#{Format::ABBR_DAYS.keys.join('|')})/io, '')
           val = Format::DAYS[$1.downcase] || Format::ABBR_DAYS[$1.downcase]
           return unless val
           e[:wday] = val
         when 'B', 'b', 'h'
           return unless str.sub!(/\A(#{Format::MONTHS.keys.join('|')})/io, '') ||
-        		str.sub!(/\A(#{Format::ABBR_MONTHS.keys.join('|')})/io, '')
+                        str.sub!(/\A(#{Format::ABBR_MONTHS.keys.join('|')})/io, '')
           val = Format::MONTHS[$1.downcase] || Format::ABBR_MONTHS[$1.downcase]
           return unless val
           e.mon = val
         when 'C', 'EC'
           return unless str.sub!(if num_pattern?($')
-        			 then /\A([-+]?\d{1,2})/
-        			 else /\A([-+]?\d{1,})/
-        			 end, '')
+                                 then /\A([-+]?\d{1,2})/
+                                 else /\A([-+]?\d{1,})/
+                                 end, '')
           val = $1.to_i
           e._cent = val
         when 'c', 'Ec'
@@ -445,9 +445,9 @@ class Date
           return unless _strptime_i(str, '%Y-%m-%d', e)
         when 'G'
           return unless str.sub!(if num_pattern?($')
-        			 then /\A([-+]?\d{1,4})/
-        			 else /\A([-+]?\d{1,})/
-        			 end, '')
+                                 then /\A([-+]?\d{1,4})/
+                                 else /\A([-+]?\d{1,})/
+                                 end, '')
           val = $1.to_i
           e[:cwyear] = val
         when 'g'
@@ -473,10 +473,10 @@ class Date
           e[:yday] = val
         when 'L'
           return unless str.sub!(if num_pattern?($')
-        			 then /\A([-+]?\d{1,3})/
-        			 else /\A([-+]?\d{1,})/
-        			 end, '')
-#	  val = Rational($1.to_i, 10**3)
+                                 then /\A([-+]?\d{1,3})/
+                                 else /\A([-+]?\d{1,})/
+                                 end, '')
+#          val = Rational($1.to_i, 10**3)
           val = Rational($1.to_i, 10**$1.size)
           e.sec_fraction = val
         when 'M', 'OM'
@@ -491,10 +491,10 @@ class Date
           e.mon = val
         when 'N'
           return unless str.sub!(if num_pattern?($')
-        			 then /\A([-+]?\d{1,9})/
-        			 else /\A([-+]?\d{1,})/
-        			 end, '')
-#	  val = Rational($1.to_i, 10**9)
+                                 then /\A([-+]?\d{1,9})/
+                                 else /\A([-+]?\d{1,})/
+                                 end, '')
+#          val = Rational($1.to_i, 10**9)
           val = Rational($1.to_i, 10**$1.size)
           e.sec_fraction = val
         when 'n', 't'
@@ -553,9 +553,9 @@ class Date
           return unless _strptime_i(str, '%m/%d/%y', e)
         when 'Y', 'EY'
           return unless str.sub!(if num_pattern?($')
-        			 then /\A([-+]?\d{1,4})/
-        			 else /\A([-+]?\d{1,})/
-        			 end, '')
+                                 then /\A([-+]?\d{1,4})/
+                                 else /\A([-+]?\d{1,})/
+                                 end, '')
           val = $1.to_i
           e.year = val
         when 'y', 'Ey', 'Oy'
@@ -566,9 +566,9 @@ class Date
           e._cent ||= if val >= 69 then 19 else 20 end
         when 'Z', /\A:{0,3}z/
           return unless str.sub!(/\A((?:gmt|utc?)?[-+]\d+(?:[,.:]\d+(?::\d+)?)?
-        			    |[[:alpha:].\s]+(?:standard|daylight)\s+time\b
-        			    |[[:alpha:]]+(?:\s+dst)?\b
-        			    )/ix, '')
+                                    |[[:alpha:].\s]+(?:standard|daylight)\s+time\b
+                                    |[[:alpha:]]+(?:\s+dst)?\b
+                                    )/ix, '')
           val = $1
           e.zone = val
           offset = zone_to_diff(val)
@@ -722,43 +722,43 @@ class Date
 
   def self._parse_time(str, e) # :nodoc:
     if str.sub!(
-        	/(
-        	   (?:
-        	     \d+\s*:\s*\d+
-        	     (?:
-        	       \s*:\s*\d+(?:[,.]\d*)?
-        	     )?
-        	   |
-        	     \d+\s*h(?:\s*\d+m?(?:\s*\d+s?)?)?
-        	   )
-        	   (?:
-        	     \s*
-        	     [ap](?:m\b|\.m\.)
-        	   )?
-        	 |
-        	   \d+\s*[ap](?:m\b|\.m\.)
-        	 )
-        	 (?:
-        	   \s*
-        	   (
-        	     (?:gmt|utc?)?[-+]\d+(?:[,.:]\d+(?::\d+)?)?
-        	   |
-        	     [[:alpha:].\s]+(?:standard|daylight)\stime\b
-        	   |
-        	     [[:alpha:]]+(?:\sdst)?\b
-        	   )
-        	 )?
-        	/inx,
-        	' ')
+                /(
+                   (?:
+                     \d+\s*:\s*\d+
+                     (?:
+                       \s*:\s*\d+(?:[,.]\d*)?
+                     )?
+                   |
+                     \d+\s*h(?:\s*\d+m?(?:\s*\d+s?)?)?
+                   )
+                   (?:
+                     \s*
+                     [ap](?:m\b|\.m\.)
+                   )?
+                 |
+                   \d+\s*[ap](?:m\b|\.m\.)
+                 )
+                 (?:
+                   \s*
+                   (
+                     (?:gmt|utc?)?[-+]\d+(?:[,.:]\d+(?::\d+)?)?
+                   |
+                     [[:alpha:].\s]+(?:standard|daylight)\stime\b
+                   |
+                     [[:alpha:]]+(?:\sdst)?\b
+                   )
+                 )?
+                /inx,
+                ' ')
 
       t = $1
       e.zone = $2 if $2
 
       t =~ /\A(\d+)h?
               (?:\s*:?\s*(\d+)m?
-        	(?:
-        	  \s*:?\s*(\d+)(?:[,.](\d+))?s?
-        	)?
+                (?:
+                  \s*:?\s*(\d+)(?:[,.](\d+))?s?
+                )?
               )?
             (?:\s*([ap])(?:m\b|\.m\.))?/inx
 
@@ -796,17 +796,17 @@ class Date
 
   def self._parse_eu(str, e) # :nodoc:
     if str.sub!(
-        	/'?(\d+)[^-\d\s]*
-        	 \s*
-        	 (#{Format::ABBR_MONTHS.keys.join('|')})[^-\d\s']*
-        	 (?:
-        	   \s*
-        	   (c(?:e|\.e\.)|b(?:ce|\.c\.e\.)|a(?:d|\.d\.)|b(?:c|\.c\.))?
-        	   \s*
-        	   ('?-?\d+(?:(?:st|nd|rd|th)\b)?)
-        	 )?
-        	/inox,
-        	' ') # '
+                /'?(\d+)[^-\d\s]*
+                 \s*
+                 (#{Format::ABBR_MONTHS.keys.join('|')})[^-\d\s']*
+                 (?:
+                   \s*
+                   (c(?:e|\.e\.)|b(?:ce|\.c\.e\.)|a(?:d|\.d\.)|b(?:c|\.c\.))?
+                   \s*
+                   ('?-?\d+(?:(?:st|nd|rd|th)\b)?)
+                 )?
+                /inox,
+                ' ') # '
       s3e(e, $4, Format::ABBR_MONTHS[$2.downcase], $1,
           $3 && $3[0,1].downcase == 'b')
       true
@@ -815,17 +815,17 @@ class Date
 
   def self._parse_us(str, e) # :nodoc:
     if str.sub!(
-        	/\b(#{Format::ABBR_MONTHS.keys.join('|')})[^-\d\s']*
-        	 \s*
-        	 ('?\d+)[^-\d\s']*
-        	 (?:
-        	   \s*
-        	   (c(?:e|\.e\.)|b(?:ce|\.c\.e\.)|a(?:d|\.d\.)|b(?:c|\.c\.))?
-        	   \s*
-        	   ('?-?\d+)
-        	 )?
-        	/inox,
-        	' ') # '
+                /\b(#{Format::ABBR_MONTHS.keys.join('|')})[^-\d\s']*
+                 \s*
+                 ('?\d+)[^-\d\s']*
+                 (?:
+                   \s*
+                   (c(?:e|\.e\.)|b(?:ce|\.c\.e\.)|a(?:d|\.d\.)|b(?:c|\.c\.))?
+                   \s*
+                   ('?-?\d+)
+                 )?
+                /inox,
+                ' ') # '
       s3e(e, $4, Format::ABBR_MONTHS[$1.downcase], $2,
           $3 && $3[0,1].downcase == 'b')
       true
@@ -884,11 +884,11 @@ class Date
 
   def self._parse_vms(str, e) # :nodoc:
     if str.sub!(/('?-?\d+)-(#{Format::ABBR_MONTHS.keys.join('|')})[^-]*
-        	-('?-?\d+)/inox, ' ')
+                -('?-?\d+)/inox, ' ')
       s3e(e, $3, Format::ABBR_MONTHS[$2.downcase], $1)
       true
     elsif str.sub!(/\b(#{Format::ABBR_MONTHS.keys.join('|')})[^-]*
-        	-('?-?\d+)(?:-('?-?\d+))?/inox, ' ')
+                -('?-?\d+)(?:-('?-?\d+))?/inox, ' ')
       s3e(e, $3, Format::ABBR_MONTHS[$1.downcase], $2)
       true
     end
@@ -931,25 +931,25 @@ class Date
 
   def self._parse_ddd(str, e) # :nodoc:
     if str.sub!(
-        	/([-+]?)(\d{2,14})
-        	  (?:
-        	    \s*
-        	    t?
-        	    \s*
-        	    (\d{2,6})?(?:[,.](\d*))?
-        	  )?
-        	  (?:
-        	    \s*
-        	    (
-        	      z\b
-        	    |
-        	      [-+]\d{1,4}\b
-        	    |
-        	      \[[-+]?\d[^\]]*\]
-        	    )
-        	  )?
-        	/inx,
-        	' ')
+                /([-+]?)(\d{2,14})
+                  (?:
+                    \s*
+                    t?
+                    \s*
+                    (\d{2,6})?(?:[,.](\d*))?
+                  )?
+                  (?:
+                    \s*
+                    (
+                      z\b
+                    |
+                      [-+]\d{1,4}\b
+                    |
+                      \[[-+]?\d[^\]]*\]
+                    )
+                  )?
+                /inx,
+                ' ')
       case $2.size
       when 2
         if $3.nil? && $4
@@ -1117,13 +1117,13 @@ class Date
       if e[:cwyear]
         if e[:cwyear] >= 0 && e[:cwyear] <= 99
           e[:cwyear] += if e[:cwyear] >= 69
-        	      then 1900 else 2000 end
+                      then 1900 else 2000 end
         end
       end
       if e.year
         if e.year >= 0 && e.year <= 99
           e.year += if e.year >= 69
-        	    then 1900 else 2000 end
+                    then 1900 else 2000 end
         end
       end
     end
