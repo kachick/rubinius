@@ -63,11 +63,11 @@ describe :bigdecimal_modulo, :shared => true do
     @one_minus.modulo(BigDecimal('0.2')).should == @zero
   end
 
-  it "returns a [Float value] when the argument is Float" do
+  it "returns a BigDecimal when the argument is a Float" do
     @two.send(@method, 2.0).should == 0.0
     @one.send(@method, 2.0).should == 1.0
     res = @two.send(@method, 5.0)
-    res.kind_of?(BigDecimal).should == true
+    res.should be_an_instance_of(BigDecimal)
   end
 
   it "returns NaN if NaN is involved" do
