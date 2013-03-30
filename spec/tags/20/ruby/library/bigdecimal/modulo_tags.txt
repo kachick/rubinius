@@ -1,2 +1,2 @@
-fails:BigDecimal#% returns a [Float value] when the argument is Float
-fails:BigDecimal#modulo returns a [Float value] when the argument is Float
+fails:BigDecimal#% returns a BigDecimal when the argument is a Float
+fails:BigDecimal#modulo returns a BigDecimal when the argument is a Float
