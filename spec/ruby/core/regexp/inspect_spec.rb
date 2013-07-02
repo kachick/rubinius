@@ -49,4 +49,22 @@ describe "Regexp#inspect" do
   it "does not over escape" do
     Regexp.new('\\\/').inspect.should == "/\\\\\\//"
   end
+
+  describe "on an uninitialized instance"
+    before :each do
+      @uninitialized = Regexp.allocate
+    end
+
+    ruby_version_is ""..."1.9" do
+      it "raises a TypeError" do
+        lambda {@uninitialized.inspect}.should raise_error(TypeError)
+      end
+    end
+
+    ruby_version_is "1.9" do
+      it "returns a String" do
+        @uninitialized.inspect.should be_an_instance_of(String)
+      end
+    end
+  end
 end
