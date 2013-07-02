@@ -104,6 +104,7 @@ class Regexp
   end
 
   def inspect
+    return "#<Regexp:0x#{__id__.to_s(16)}>" unless @source
     # the regexp matches any / that is after anything except for a \
     escape = source.gsub(%r!(\\.)|/!) { $1 || '\/' }
     str = "/#{escape}/#{option_to_string(options)}"
