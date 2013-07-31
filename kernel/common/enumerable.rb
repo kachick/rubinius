@@ -256,7 +256,7 @@ module Enumerable
   end
 
   def first(n=undefined)
-    return take(n) unless undefined.equal?(n)
+    return __take__(n) unless undefined.equal?(n)
     each { |obj| return obj }
     nil
   end
@@ -504,6 +504,8 @@ module Enumerable
 
     array
   end
+  alias_method :__take__, :take
+  private :__take__
 
   def take_while
     return to_enum(:take_while) unless block_given?
