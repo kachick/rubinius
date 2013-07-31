@@ -177,6 +177,14 @@ module Enumerable
       end
       alias_method :find_all, :select
 
+      def reject
+        raise ArgumentError, "Lazy#reject requires a block" unless block_given?
+
+        Lazy.new(self, nil) do |yielder, *args|
+          yielder.<<(*args) unless yield(*args)
+        end
+      end
+
       def grep(pattern)
         if block_given?
           Lazy.new(self, nil) do |yielder, *args|
