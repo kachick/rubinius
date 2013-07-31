@@ -49,6 +49,8 @@ module Enumerable
       end
       private :initialize
 
+      alias_method :force, :to_a
+
       def map
         raise ArgumentError, 'Lazy#{map,collect} requires a block' unless block_given?
 
