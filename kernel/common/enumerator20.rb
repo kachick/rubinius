@@ -30,6 +30,18 @@ module Enumerable
     end
     private :initialize
 
+    def each(*args, &block)
+      if block_given?
+        @object.__send__(@iter, *@args, *args, &block)
+      else
+        unless args.empty?
+          @args = [*@args, *args]
+        end
+
+        self
+      end
+    end
+
     def size
       @size.kind_of?(Proc) ? @size.call : @size
     end

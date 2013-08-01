@@ -5,7 +5,11 @@ module Enumerable
     include Enumerable
 
     def each(&block)
-      @object.__send__(@iter, *@args, &block)
+      if block_given?
+        @object.__send__(@iter, *@args, &block)
+      else
+        self
+      end
     end
 
     def each_with_index
