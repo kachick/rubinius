@@ -78,12 +78,12 @@ module Enumerable
         raise ArgumentError, "Lazy#initialize requires a block" unless block_given?
         Rubinius.check_frozen
 
-        super(size) do |yielder|
+        super(size) do |yielder, *each_args|
           begin
-            receiver.each do |*args|
+            receiver.each(*each_args) do |*args|
               yield yielder, *args
             end
-          rescue StopIteration
+          rescue Exception
           end
         end
 
