@@ -28,7 +28,7 @@ describe :enumerator_lazy_collect, :shared => true do
       (0..Float::INFINITY).lazy.send(@method, &:succ).first(3).should == [1, 2, 3]
     end
 
-    it "calls the block with initial args when the yield with multiple arguments" do
+    it "calls the block with initial yield arguments" do
       @mixedyield.send(@method) { |v| v }.first(12).should == [nil, 0, 0, 0, 0, nil, :default_arg, [], [], [0], [0, 1], [0, 1, 2]]
       ScratchPad.recorded.should == []
     end
