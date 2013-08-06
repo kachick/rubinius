@@ -46,6 +46,9 @@ describe :enumerator_lazy_collect, :shared => true do
     describe "when the returned Lazy evaluated by Enumerable#first" do
       it "stops after specified times" do
         (0..Float::INFINITY).lazy.send(@method, &:succ).send(@method, &:succ).first(3).should == [2, 3, 4]
+
+        EnumeratorLazySpecs::EventsMixed.new.to_enum.lazy.send(@method) {}.send(@method) {}.first(1)
+        ScratchPad.recorded.should == [:before_yield]
       end
     end
   end
