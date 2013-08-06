@@ -6,7 +6,8 @@ require File.expand_path('../fixtures/classes', __FILE__)
 ruby_version_is "2.0" do
   describe "Enumerator::Lazy#reject" do
     before(:each) do
-      @lazy = EnumeratorLazySpecs::MixedYieldAndRaiseError.new.to_enum.lazy
+      @yieldsmixed = EnumeratorLazySpecs::YieldsMixed.new.to_enum.lazy
+      @eventsmixed = EnumeratorLazySpecs::EventsMixed.new.to_enum.lazy
       ScratchPad.record []
     end
 
@@ -15,24 +16,32 @@ ruby_version_is "2.0" do
     end
 
     it "returns new instance of Enumerator::Lazy" do
-      ret = @lazy.reject {}
+      ret = @yieldsmixed.reject {}
       ret.should be_an_instance_of(enumerator_class::Lazy)
-      ret.should_not equal(@lazy)
+      ret.should_not equal(@yieldsmixed)
     end
 
     it "sets nil to size" do
       enumerator_class::Lazy.new(Object.new, 100) {}.reject {}.size.should == nil
     end
 
-    it "rejects when the given block returned truthy value" do
-      @lazy.reject { |v| !v }.first(5).should == [0, 1, 2, 3, :default_arg]
-      ScratchPad.recorded == [:after_yields]
+    describe "when the returned Lazy evaluated by Enumerable#first" do
+      it "stops after specified times" do
+        (0..Float::INFINITY).lazy.reject(&:even?).first(3).should == [1, 3, 5]
 
-      (0..Float::INFINITY).lazy.reject(&:even?).first(3).should == [1, 3, 5]
+        @eventsmixed.reject { false }.first(1)
+        ScratchPad.recorded.should == [:before_yield]
+      end
+    end
+
+    it "calls the block with a gathered array when yield with multiple arguments" do
+      yields = []
+      @yieldsmixed.reject { |v| yields << v }.force
+      yields.should == EnumeratorLazySpecs::YieldsMixed.gathered_yields
     end
 
     it "raises an ArgumentError when not given a block" do
-      lambda { @lazy.reject }.should raise_error(ArgumentError)
+      lambda { @yieldsmixed.reject }.should raise_error(ArgumentError)
     end
 
     describe "on a nested Lazy" do
@@ -40,9 +49,13 @@ ruby_version_is "2.0" do
         enumerator_class::Lazy.new(Object.new, 100) {}.take(20).reject {}.size.should == nil
       end
 
-      it "rejects when the given block returned truthy value" do
-        @lazy.take(9).reject { |v| !v }.force.should == [0, 1, 2, 3, :default_arg, [:multiple_yield1, :multiple_yield2]]
-        ScratchPad.recorded == [:after_yields]
+      describe "when the returned Lazy evaluated by Enumerable#first" do
+        it "stops after specified times" do
+          (0..Float::INFINITY).lazy.reject { |n| n < 4 }.reject(&:even?).first(3).should == [5, 7, 9]
+
+          @eventsmixed.reject { false }.reject { false }.first(1)
+          ScratchPad.recorded.should == [:before_yield]
+        end
       end
     end
   end
