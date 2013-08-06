@@ -6,6 +6,7 @@ require File.expand_path('../../fixtures/classes', __FILE__)
 describe :enumerator_lazy_select, :shared => true do
   before(:each) do
     @yieldsmixed = EnumeratorLazySpecs::YieldsMixed.new.to_enum.lazy
+    @eventsmixed = EnumeratorLazySpecs::EventsMixed.new.to_enum.lazy
     ScratchPad.record []
   end
 
@@ -27,7 +28,7 @@ describe :enumerator_lazy_select, :shared => true do
     it "stops after specified times" do
       (0..Float::INFINITY).lazy.send(@method, &:even?).first(3).should == [0, 2, 4]
 
-      EnumeratorLazySpecs::EventsMixed.new.to_enum.lazy.send(@method) { true }.first(1)
+      @eventsmixed.send(@method) { true }.first(1)
       ScratchPad.recorded.should == [:before_yield]
     end
   end
@@ -51,7 +52,7 @@ describe :enumerator_lazy_select, :shared => true do
       it "stops after specified times" do
         (0..Float::INFINITY).lazy.send(@method) { |n| n > 5 }.send(@method, &:even?).first(3).should == [6, 8, 10]
 
-        EnumeratorLazySpecs::EventsMixed.new.to_enum.lazy.send(@method) { true }.send(@method) { true }.first(1)
+        @eventsmixed.send(@method) { true }.send(@method) { true }.first(1)
         ScratchPad.recorded.should == [:before_yield]
       end
     end
