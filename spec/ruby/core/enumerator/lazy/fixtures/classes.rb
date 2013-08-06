@@ -5,15 +5,18 @@ module EnumeratorLazySpecs
     class Error < Exception; end
 
     def each(arg=:default_arg, *args)
-      yield 0
-      yield 1
-      yield 2
-      yield 3
-      yield nil
       yield
+      yield :yield0
+      yield :yield0, :yield1
+      yield :yield0, :yield1, :yeild2
+      yield(*[:yield0, :yield1, :yeild2])
+      yield nil
       yield arg
-      yield(*args)
-      yield :multiple_yield1, :multiple_yield2
+      yield args
+      yield []
+      yield [0]
+      yield [0, 1]
+      yield [0, 1, 2]
 
       ScratchPad << :after_yields
 
