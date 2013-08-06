@@ -5,7 +5,7 @@ require File.expand_path('../../fixtures/classes', __FILE__)
 
 describe :enumerator_lazy_select, :shared => true do
   before(:each) do
-    @lazy = EnumeratorLazySpecs::MixedYieldAndRaiseError.new.to_enum.lazy
+    @yieldsmixed = EnumeratorLazySpecs::YieldsMixed.new.to_enum.lazy
     ScratchPad.record []
   end
 
@@ -14,24 +14,32 @@ describe :enumerator_lazy_select, :shared => true do
   end
 
   it "returns new instance of Enumerator::Lazy" do
-    ret = @lazy.send(@method) {}
+    ret = @yieldsmixed.send(@method) {}
     ret.should be_an_instance_of(enumerator_class::Lazy)
-    ret.should_not equal(@lazy)
+    ret.should_not equal(@yieldsmixed)
   end
 
   it "sets nil to size" do
     enumerator_class::Lazy.new(Object.new, 100) {}.send(@method) { true }.size.should == nil
   end
 
-  it "selects elements when the given block returned truthy value" do
-    @lazy.send(@method) { |v| v }.first(5).should == [0, 1, 2, 3, :default_arg]
-    ScratchPad.recorded == [:after_yields]
+  describe "when the returned Lazy evaluated by Enumerable#first" do
+    it "stops after specified times" do
+      (0..Float::INFINITY).lazy.send(@method, &:even?).first(3).should == [0, 2, 4]
 
-    (0..Float::INFINITY).lazy.send(@method, &:even?).first(3).should == [0, 2, 4]
+      EnumeratorLazySpecs::EventsMixed.new.to_enum.lazy.send(@method) { true }.first(1)
+      ScratchPad.recorded.should == [:before_yield]
+    end
+  end
+
+  it "calls the block with a gathered array when yield with multiple arguments" do
+    yields = []
+    @yieldsmixed.send(@method) { |v| yields << v }.force
+    yields.should == EnumeratorLazySpecs::YieldsMixed.gathered_yields
   end
 
   it "raises an ArgumentError when not given a block" do
-    lambda { @lazy.send(@method) }.should raise_error(ArgumentError)
+    lambda { @yieldsmixed.send(@method) }.should raise_error(ArgumentError)
   end
 
   describe "on a nested Lazy" do
@@ -39,9 +47,13 @@ describe :enumerator_lazy_select, :shared => true do
       enumerator_class::Lazy.new(Object.new, 100) {}.take(50) {}.send(@method) { true }.size.should == nil
     end
 
-    it "selects elements when the given block returned truthy value" do
-      @lazy.take(9).send(@method) { |v| v }.force.should == [0, 1, 2, 3, :default_arg, [:multiple_yield1, :multiple_yield2]]
-      ScratchPad.recorded == [:after_yields]
+    describe "when the returned Lazy evaluated by Enumerable#first" do
+      it "stops after specified times" do
+        (0..Float::INFINITY).lazy.send(@method) { |n| n > 5 }.send(@method, &:even?).first(3).should == [6, 8, 10]
+
+        EnumeratorLazySpecs::EventsMixed.new.to_enum.lazy.send(@method) { true }.send(@method) { true }.first(1)
+        ScratchPad.recorded.should == [:before_yield]
+      end
     end
   end
 end
