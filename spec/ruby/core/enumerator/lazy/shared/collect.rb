@@ -40,7 +40,7 @@ describe :enumerator_lazy_collect, :shared => true do
     end
 
     describe "when the returned Lazy evaluated by Enumerable#first" do
-      it "calls the block only specified times" do
+      it "stops after specified times" do
         (0..Float::INFINITY).lazy.send(@method, &:succ).send(@method, &:succ).first(3).should == [2, 3, 4]
       end
     end
