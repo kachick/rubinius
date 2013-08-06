@@ -6,7 +6,8 @@ require File.expand_path('../fixtures/classes', __FILE__)
 ruby_version_is "2.0" do
   describe "Enumerator::Lazy#drop_while" do
     before(:each) do
-      @lazy = EnumeratorLazySpecs::MixedYieldAndRaiseError.new.to_enum.lazy
+      @yieldsmixed = EnumeratorLazySpecs::YieldsMixed.new.to_enum.lazy
+      @eventsmixed = EnumeratorLazySpecs::EventsMixed.new.to_enum.lazy
       ScratchPad.record []
     end
 
@@ -15,22 +16,32 @@ ruby_version_is "2.0" do
     end
 
     it "returns new instance of Enumerator::Lazy" do
-      ret = @lazy.drop_while {}
+      ret = @yieldsmixed.drop_while {}
       ret.should be_an_instance_of(enumerator_class::Lazy)
-      ret.should_not equal(@lazy)
+      ret.should_not equal(@yieldsmixed)
     end
 
     it "sets nil to size" do
       enumerator_class::Lazy.new(Object.new, 100) {}.drop_while { |v| v }.size.should == nil
     end
 
-    it "takes from just before falsy returned to tail" do
-      @lazy.drop_while { |v| v }.take(5).force.should == [nil, nil, :default_arg, nil, [:multiple_yield1, :multiple_yield2]]
-      ScratchPad.recorded == [:after_yields]
+    describe "when the returned Lazy evaluated by Enumerable#first" do
+      it "stops after specified times" do
+        (0..Float::INFINITY).lazy.drop_while { |n| n < 5 }.first(2).should == [5, 6]
+
+        @eventsmixed.drop_while { false }.first(1)
+        ScratchPad.recorded.should == [:before_yield]
+      end
+    end
+
+    it "calls the block with initial values when yield with multiple arguments" do
+      yields = []
+      @yieldsmixed.drop_while { |v| yields << v; true }.force
+      yields.should == EnumeratorLazySpecs::YieldsMixed.initial_yields
     end
 
     it "raises an ArgumentError when not given a block" do
-      lambda { @lazy.drop_while }.should raise_error(ArgumentError)
+      lambda { @yieldsmixed.drop_while }.should raise_error(ArgumentError)
     end
 
     describe "on a nested Lazy" do
@@ -38,9 +49,13 @@ ruby_version_is "2.0" do
         enumerator_class::Lazy.new(Object.new, 100) {}.take(20).drop_while { |v| v }.size.should == nil
       end
 
-      it "takes from just before falsy returned to tail" do
-        @lazy.take(9).drop_while { |v| v }.force.should == [nil, nil, :default_arg, nil, [:multiple_yield1, :multiple_yield2]]
-        ScratchPad.recorded == [:after_yields]
+      describe "when the returned Lazy evaluated by Enumerable#first" do
+        it "stops after specified times" do
+          (0..Float::INFINITY).lazy.drop_while { |n| n < 5 }.drop_while { |n| n.odd? }.first(2).should == [6, 7]
+
+          @eventsmixed.drop_while { false }.drop_while { false }.first(1)
+          ScratchPad.recorded.should == [:before_yield]
+        end
       end
     end
   end
