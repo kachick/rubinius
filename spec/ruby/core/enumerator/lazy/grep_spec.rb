@@ -35,7 +35,7 @@ ruby_version_is "2.0" do
     end
 
     describe "when the returned Lazy evaluated by Enumerable#first" do
-     it "stops after specified times when not given a block" do
+      it "stops after specified times when not given a block" do
         (0..Float::INFINITY).lazy.grep(Integer).first(3).should == [0, 1, 2]
 
         @eventsmixed.grep(BasicObject).first(1)
