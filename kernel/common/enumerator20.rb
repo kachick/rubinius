@@ -48,10 +48,11 @@ module Enumerable
 
       unless args.empty?
         enumerator = dup
-        unless @args.empty?
-          new_args = @args + args
-        else
+
+        if @args.empty?
           new_args = args
+        else
+          new_args = @args + args
         end
       end
 
