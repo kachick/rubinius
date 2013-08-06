@@ -8,7 +8,6 @@ ruby_version_is "2.0" do
     before(:each) do
       @yieldsmixed = EnumeratorLazySpecs::YieldsMixed.new.to_enum.lazy
       @eventsmixed = EnumeratorLazySpecs::EventsMixed.new.to_enum.lazy
-      @integer_or_array = lambda { |v| v.kind_of?(Integer) || v.kind_of?(Array) }
       ScratchPad.record []
     end
 
