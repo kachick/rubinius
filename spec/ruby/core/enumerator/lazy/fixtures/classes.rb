@@ -6,10 +6,10 @@ module EnumeratorLazySpecs
 
     def each(arg=:default_arg, *args)
       yield
-      yield :yield0
-      yield :yield0, :yield1
-      yield :yield0, :yield1, :yeild2
-      yield(*[:yield0, :yield1, :yeild2])
+      yield 0
+      yield 0, 1
+      yield 0, 1, 2
+      yield(*[0, 1, 2])
       yield nil
       yield arg
       yield args
