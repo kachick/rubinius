@@ -58,7 +58,7 @@ describe :enumerator_lazy_collect_concat, :shared => true do
       it "stops after specified times" do
         (0..Float::INFINITY).lazy.map {|n| n * 10 }.send(@method) { |n| n.to_s }.first(6).should == %w[0 10 20 30 40 50]
 
-        @eventsmixed.send(@method) {}.first(1)
+        @eventsmixed.send(@method) {}.send(@method) {}.first(1)
         ScratchPad.recorded.should == [:before_yield]
       end
 
