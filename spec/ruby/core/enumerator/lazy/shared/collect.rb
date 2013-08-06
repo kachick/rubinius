@@ -5,7 +5,7 @@ require File.expand_path('../../fixtures/classes', __FILE__)
 
 describe :enumerator_lazy_collect, :shared => true do
   before(:each) do
-    @mixedyield = EnumeratorLazySpecs::MixedYieldAndRaiseError.new.to_enum.lazy
+    @yieldsmixed = EnumeratorLazySpecs::YieldsMixed.new.to_enum.lazy
     ScratchPad.record []
   end
 
@@ -14,9 +14,9 @@ describe :enumerator_lazy_collect, :shared => true do
   end
 
   it "returns new instance of Enumerator::Lazy" do
-    ret = @mixedyield.send(@method) {}
+    ret = @yieldsmixed.send(@method) {}
     ret.should be_an_instance_of(enumerator_class::Lazy)
-    ret.should_not equal(@mixedyield)
+    ret.should_not equal(@yieldsmixed)
   end
 
   it "keeps size" do
@@ -26,12 +26,16 @@ describe :enumerator_lazy_collect, :shared => true do
   describe "when the returned Lazy evaluated by Enumerable#first" do
     it "stops after specified times" do
       (0..Float::INFINITY).lazy.send(@method, &:succ).first(3).should == [1, 2, 3]
-    end
 
-    it "calls the block with initial yield arguments" do
-      @mixedyield.send(@method) { |v| v }.first(12).should == [nil, 0, 0, 0, 0, nil, :default_arg, [], [], [0], [0, 1], [0, 1, 2]]
-      ScratchPad.recorded.should == []
+      EnumeratorLazySpecs::EventsMixed.new.to_enum.lazy.send(@method) {}.first(1)
+      ScratchPad.recorded.should == [:before_yield]
     end
+  end
+
+  it "calls the block with initial values when yield with multiple arguments" do
+    yields = []
+    @yieldsmixed.send(@method) { |v| yields << v }.force
+    yields.should == EnumeratorLazySpecs::YieldsMixed.initial_yields
   end
 
   describe "on a nested Lazy" do
