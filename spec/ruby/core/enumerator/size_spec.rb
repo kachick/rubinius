@@ -10,11 +10,13 @@ ruby_version_is "2.0" do
       Enumerator.new(nil) {}.size.should be_nil
     end
 
-    it "returns calculated value if set size is a Proc" do
+    it "returns returning value from size.call if set size is a Proc" do
       base_size = 100
       enum = Enumerator.new(lambda { base_size + 1 }) {}
       base_size = 200
       enum.size.should == 201
+      base_size = 300
+      enum.size.should == 301
     end
   end
 end
