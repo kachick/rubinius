@@ -25,11 +25,11 @@ ruby_version_is "2.0" do
       enumerator_class::Lazy.new(Object.new, 100) {}.take_while { true }.size.should == nil
     end
 
-    describe "when the returned Lazy evaluated by Enumerable#first" do
+    describe "when the returned Lazy evaluated by .force" do
       it "stops after specified times" do
-        (0..Float::INFINITY).lazy.take_while { |n| n < 3 }.first(3).should == [0, 1, 2]
+        (0..Float::INFINITY).lazy.take_while { |n| n < 3 }.force.should == [0, 1, 2]
 
-        @eventsmixed.take_while { true }.first(1)
+        @eventsmixed.take_while { false }.force
         ScratchPad.recorded.should == [:before_yield]
       end
     end
@@ -49,11 +49,11 @@ ruby_version_is "2.0" do
         enumerator_class::Lazy.new(Object.new, 100) {}.take(20).take_while { true }.size.should == nil
       end
 
-      describe "when the returned Lazy evaluated by Enumerable#first" do
+      describe "when the returned Lazy evaluated by .force" do
         it "stops after specified times" do
-          (0..Float::INFINITY).lazy.take_while { |n| n < 3 }.take_while(&:even?).first(3).should == [0]
+          (0..Float::INFINITY).lazy.take_while { |n| n < 3 }.take_while(&:even?).force.should == [0]
 
-          @eventsmixed.take_while { true }.take_while { true }.first(1)
+          @eventsmixed.take_while { true }.take_while { false }.force
           ScratchPad.recorded.should == [:before_yield]
         end
       end
