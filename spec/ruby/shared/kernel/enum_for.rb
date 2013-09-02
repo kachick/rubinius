@@ -5,12 +5,12 @@ describe :enum_for, :shared => true do
   end
 
   it "returns a new enumerator" do
-    "abc".send(@method).should be_an_instance_of(enumerator_class)
+    Object.new.send(@method).should be_an_instance_of(enumerator_class)
   end
 
   it "defaults the first argument to :each" do
     enum = [1,2].send(@method)
-    enum.map { |v| v }.should == [1,2].each { |v| v }
+    enum.map { |v| v }.should == [1,2].map { |v| v }
   end
 
   it "exposes multi-arg yields as an array" do
