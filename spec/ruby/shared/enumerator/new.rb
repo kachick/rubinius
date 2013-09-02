@@ -64,6 +64,10 @@ describe :enum_new, :shared => true do
         enumerator_class.new(100) {}.size.should == 100
       end
 
+      it "sets Float::INFINITY to own size if the given size is Float::INFINITY" do
+        enumerator_class.new(Float::INFINITY) {}.size.should == Float::INFINITY
+      end
+
       it "sets nil to own size if the given size is nil" do
         enumerator_class.new(nil) {}.size.should be_nil
       end
