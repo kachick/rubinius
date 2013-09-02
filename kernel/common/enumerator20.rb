@@ -99,15 +99,14 @@ module Enumerable
       end
       private :initialize
 
-      def to_enum(method_name=:each, *method_args, &block)
-        size = block_given? ? block : nil
-        ret = Lazy.allocate
+      def to_enum(method_name=:each, *method_args, &block_for_size)
+        lazy_enumerator = Lazy.allocate
 
         Rubinius.privately do
-          ret.initialize_enumerator @object, size, method_name, *method_args
+          lazy_enumerator.initialize_enumerator @object, block_for_size, method_name, *method_args
         end
 
-        ret
+        lazy_enumerator
       end
       alias_method :enum_for, :to_enum
 
