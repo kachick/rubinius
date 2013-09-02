@@ -176,7 +176,7 @@ class Struct
   end
 
   def each_pair
-    return to_enum :each_pair unless block_given?
+    return to_enum(:each_pair) { size } unless block_given?
     _attrs.each { |var| yield var, instance_variable_get(:"@#{var}") }
     self
   end
