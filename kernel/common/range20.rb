@@ -13,7 +13,7 @@ class Range
         nil
       end
     when @begin.kind_of?(Numeric) && @end.kind_of?(Numeric)
-      diff = @begin - @end
+      diff = @end - @begin
       diff < 0 ? 0 : diff.to_int
     else
       nil
