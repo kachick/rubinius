@@ -27,6 +27,13 @@ describe "Struct#each_pair" do
       car = StructClasses::Car.new('Ford', 'Ranger')
       car.each_pair.should be_an_instance_of(enumerator_class)
     end
+
+    ruby_version_is "2.0" do
+      it "defines to return member count when calling #size on the enumerator" do
+        Struct.new(:foo).new.each_pair.size.should == 1
+        Struct.new(:foo, :bar).new.each_pair.size.should == 2
+      end
+    end
   end
 
   it_behaves_like :struct_accessor, :each_pair
