@@ -168,7 +168,7 @@ class Struct
   end
 
   def each
-    return to_enum :each unless block_given?
+    return to_enum(:each) { size } unless block_given?
     values.each do |v|
       yield v
     end
