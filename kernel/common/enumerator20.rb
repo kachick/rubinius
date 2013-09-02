@@ -26,7 +26,11 @@ module Enumerable
         end
 
         if !size.nil? && !size.kind_of?(Proc)
-          size = Rubinius::Type.coerce_to size, Integer, :to_int
+          size = if size == Float::INFINITY
+            Float::INFINITY
+          else
+            Rubinius::Type.coerce_to size, Integer, :to_int
+          end
         end
 
         receiver = Generator.new(&block)
