@@ -105,11 +105,6 @@ module Kernel
   end
   module_function :Integer
 
-  def to_enum(method=:each, *args)
-    Enumerator.new(self, method, *args)
-  end
-  alias_method :enum_for, :to_enum
-
   # Send message to object with given arguments.
   #
   # Ignores visibility of method, and may therefore be used to invoke

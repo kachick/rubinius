@@ -535,6 +535,12 @@ module Kernel
     Rubinius::Type.infect("#<#{self.class}:0x#{self.__id__.to_s(16)}>", self)
   end
 
+  def to_enum(method=:each, *args)
+    Enumerable::Enumerator.new(self, method, *args)
+  end
+
+  alias_method :enum_for, :to_enum
+
   ##
   # Loads the given file as executable code and returns true. If
   # the file cannot be found, cannot be compiled or some other
