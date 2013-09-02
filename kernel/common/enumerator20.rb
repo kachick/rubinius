@@ -25,6 +25,10 @@ module Enumerable
           size = receiver_or_size
         end
 
+        if !size.nil? && !size.kind_of?(Proc)
+          size = Rubinius::Type.coerce_to size, Integer, :to_int
+        end
+
         receiver = Generator.new(&block)
       else
         if undefined.equal? receiver_or_size
