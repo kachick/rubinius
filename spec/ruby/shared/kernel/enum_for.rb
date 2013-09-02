@@ -30,4 +30,26 @@ describe :enum_for, :shared => true do
     enum.next.should == [:d1, :d2]
     enum.next.should == [:e1, :e2, :e3]
   end
+
+  ruby_version_is "2.0" do
+    describe "when given a block" do
+      it "sets the block to own size" do
+        n = 100
+        enum = Object.new.send(@method) { n }
+        n = 200
+        enum.size.should == 200
+
+        proc = Proc.new {}
+        Object.new.send(@method) { proc }.size.should equal(proc)
+
+        Object.new.send(@method) { nil }.size.should be_nil
+      end
+    end
+
+    describe "when not given a block" do
+      it "sets nil to own size" do
+        Object.new.send(@method).size.should be_nil
+      end
+    end
+  end
 end
