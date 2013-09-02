@@ -23,14 +23,14 @@ ruby_version_is "2.0" do
       end
     end
 
-    describe "wiht other Numeric elements" do
+    describe "with other Numeric elements" do
       it "returns an Integer coerced difference between beginning number and ending number" do
         (1.1..3.9).size.should == 3
         (1.1...3.9).size.should == 3
       end
     end
 
-    describe "wiht non Numeric elements" do
+    describe "with non Numeric elements" do
       it "returns nil" do
         ("1".."3").size.should be_nil
         ("1"..."3").size.should be_nil
