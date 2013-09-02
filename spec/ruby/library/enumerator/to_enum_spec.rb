@@ -5,6 +5,6 @@ ruby_version_is ""..."1.9" do
   require 'enumerator'
 
   describe "#to_enum" do
-    it_behaves_like :enum_for, :enum_for
+    it_behaves_like :enum_for, :to_enum
   end
 end
