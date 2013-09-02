@@ -17,5 +17,24 @@ describe "Struct#select" do
     struct.select { true }.should be_kind_of(Array)
   end
 
+  ruby_version_is "" ... "1.9" do
+    it "raises a LocalJumpError if not passed a block" do
+      lambda { Struct.new(:foo).new.select }.should raise_error(LocalJumpError)
+    end
+  end
+
+  ruby_version_is "1.9" do
+    it "returns an Enumerator if not passed a block" do
+      Struct.new(:foo).new.select.should be_an_instance_of(enumerator_class)
+    end
+
+    ruby_version_is "2.0" do
+      it "defines to return member count when calling #size on the enumerator" do
+        Struct.new(:foo).new.select.size.should == 1
+        Struct.new(:foo, :bar).new.select.size.should == 2
+      end
+    end
+  end
+
   it_behaves_like :struct_accessor, :select
 end
