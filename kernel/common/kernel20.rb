@@ -6,6 +6,18 @@ module Kernel
   private :respond_to_missing?
   public :remove_instance_variable
 
+  def to_enum(method_name=:each, *method_args, &block_for_size)
+    enumerator = Enumerator.allocate
+
+    Rubinius.privately do
+      enumerator.initialize_enumerator self, block_for_size, method_name, *method_args
+    end
+
+    enumerator
+  end
+
+  alias_method :enum_for, :to_enum
+
   def warn(*messages)
     $stderr.puts(*messages) if !$VERBOSE.nil? && !messages.empty?
     nil
