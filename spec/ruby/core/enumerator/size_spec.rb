@@ -18,5 +18,19 @@ ruby_version_is "2.0" do
       base_size = 300
       enum.size.should == 301
     end
+
+    it "returns returning value from size.call without coercing" do
+      coercible = mock "not coercible to an Intege"
+      coercible.should_not_receive(:to_int)
+      Enumerator.new(lambda { coercible }) {}.size.should equal(coercible)
+    end
+
+    ruby_version_is "2.1" do
+      it "returns returning value from size.call if set size has #call method" do
+        callable = mock "callable"
+        callable.should_receive(:call).and_return :returned_from_call
+        Enumerator.new(callable) {}.size.should == :returned_from_call
+      end
+    end
   end
 end
