@@ -79,15 +79,7 @@ class Range
     end
 
     if first.kind_of?(Float)
-      err = (first.abs + last.abs + (last - first).abs) / step_size.abs * Float::EPSILON
-      err = 0.5 if err > 0.5
-      if @excl
-        n = ((last - first) / step_size - err).floor
-        n += 1 if n * step_size + first < last
-      else
-        n = ((last - first) / step_size + err).floor + 1
-      end
-
+      n = float_diff step_size
       i = 0
       while i < n
         d = i * step_size + first
@@ -155,5 +147,18 @@ class Range
     return false
   end
   private :__cover__?
+
+  def float_diff(step_size)
+    err = (@begin.abs + @end.abs + (@end - @begin).abs) / step_size.abs * Float::EPSILON
+    err = 0.5 if err > 0.5
+    if @excl
+      n = ((@end - @begin) / step_size - err).floor
+      n += 1 if n * step_size + @begin < @end
+    else
+      n = ((@end - @begin) / step_size + err).floor + 1
+    end
+    n
+  end
+  private :float_diff
 end
 
