@@ -45,6 +45,12 @@ describe "Kernel.loop" do
         break cnt if cnt >= 42
       end.should == 42
     end
+
+    ruby_version_is "2.0" do
+      it "defines to return Float::INFINITY when calling #size on the enumerator" do
+        loop.size.should == Float::INFINITY
+      end
+    end
   end
 
   ruby_version_is "1.8.7" do
